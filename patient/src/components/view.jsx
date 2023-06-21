@@ -4,7 +4,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 import './css/style.css';
-//import './fonts/Material-Design-Iconic-Font.woff2';
 import './css/tablestyle.css';
 import './css/navbar.css';
 
@@ -12,6 +11,8 @@ const ViewPatients = () => {
   const [patients, setPatients] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [searchId, setSearchId] = useState('');
+
 
   useEffect(() => {
     fetchPatients();
@@ -55,10 +56,32 @@ const ViewPatients = () => {
     }
   };
 
+  const handleSearch = async (event) => {
+    const searchValue = event.target.value;
+    setSearchId(searchValue);
+  
+    try {
+      if (searchValue === '') {
+        // Fetch all patients if search value is empty
+        fetchPatients();
+      } else {
+        const response = await axios.get(`http://localhost:8080/patients/${searchValue}`);
+        const patient = response.data;
+        setPatients(patient ? [patient] : []);
+      }
+    } catch (error) {
+      console.error('Error searching patients:', error);
+    }
+  };
+  
+
   return (
     <div>
       <div className='container'>
         <h2>Patients</h2>
+        <div className="search-bar">
+          <input type="text" placeholder="Search by ID" value={searchId} onChange={handleSearch} />
+        </div>
         <table>
           <thead>
             <tr>
