@@ -20,7 +20,7 @@ const ViewPatients = () => {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/patients/getAll');
+      const response = await axios.get('http://localhost:8080/patient');
       setPatients(response.data);
     } catch (error) {
       console.error('Error fetching patients:', error);
@@ -29,7 +29,7 @@ const ViewPatients = () => {
 
   const deletePatient = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/patients/${id}`);
+      await axios.delete(`http://localhost:8080/patient/${id}`);
       fetchPatients(); // Refresh the patient list after deletion
     } catch (error) {
       console.error('Error deleting patient:', error);
@@ -48,7 +48,7 @@ const ViewPatients = () => {
 
   const saveEditedPatient = async (editedPatient) => {
     try {
-      await axios.put(`http://localhost:8080/patients/${editedPatient.id}`, editedPatient);
+      await axios.put(`http://localhost:8080/patient`, editedPatient);
       fetchPatients(); // Refresh the patient list after updating
       closeEditModal();
     } catch (error) {
@@ -65,7 +65,7 @@ const ViewPatients = () => {
         // Fetch all patients if search value is empty
         fetchPatients();
       } else {
-        const response = await axios.get(`http://localhost:8080/patients/${searchValue}`);
+        const response = await axios.get(`http://localhost:8080/patient/${searchValue}`);
         const patient = response.data;
         setPatients(patient ? [patient] : []);
       }
@@ -131,7 +131,16 @@ const ViewPatients = () => {
               <div className='modal-content'>
                 <h2>Edit Patient Details</h2>
                 <form onSubmit={(e) => e.preventDefault()}>
-                <div>
+              <div>
+              <div>
+              <label htmlFor='id'>ID:</label>
+              <input
+                type='text'
+                id='id'
+                value={selectedPatient.id}
+                onChange={(e) => setSelectedPatient({ ...selectedPatient, id: e.target.value })}
+              />
+            </div>
               <label htmlFor='name'>Name:</label>
               <input
                 type='text'

@@ -31,7 +31,7 @@ const PatientManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/patients/add', newPatient);
+      await axios.post('http://localhost:8080/patient', newPatient);
       setNewPatient({
         id: '',
         name: '',
